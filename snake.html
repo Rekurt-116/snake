@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <canvas
+      id="gameCanvas"
+      width="400"
+      height="400"
+      style="border: 1px solid #000000"
+    ></canvas>
+    <script src="https://code.jquery.com/jquery-4.0.0-rc.1.slim.js"></script>
+    <script>
+      var canvas = document.getElementById("gameCanvas");
+      var ctx = canvas.getContext("2d");
+      var width = canvas.width;
+      var height = canvas.height;
+
+      var blockSize = 10;
+      var widthInBlocks = width / blockSize;
+      var heightInBlocks = height / blockSize;
+
+      var score = 0;
+
+      var drawBorder = function () {
+        ctx.fillStyle = "Teal";
+        ctx.fillRect(0, 0, width, blockSize);
+        ctx.fillRect(0, height - blockSize, width, blockSize);
+        ctx.fillRect(0, 0, blockSize, height);
+        ctx.fillRect(width - blockSize, 0, blockSize, height);
+      };
+
+      var drawScore = function () {
+        ctx.font = "20px Courier";
+        ctx.fillStyle = "Black";
+        ctx.textAlign = "left";
+        ctx.textBaseline = "top";
+        ctx.fillText("Счет: " + score, blockSize, blockSize);
+      };
+
+      var gameOver = function () {
+        clearInterval(intervalId);
+        ctx.font = "60px Courier";
+        ctx.fillStyle = "Black";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("Конец игры", width / 2, height / 2);
+      };
+
+      
+      drawBorder();
+      drawScore();
+    </script>
+  </body>
+</html>
