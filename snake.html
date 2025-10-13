@@ -35,7 +35,7 @@
 
       var drawScore = function () {
         ctx.font = "20px Courier";
-        ctx.fillStyle = "Black";
+        ctx.fillStyle = "White";
         ctx.textAlign = "left";
         ctx.textBaseline = "top";
         ctx.fillText("Счет: " + score, blockSize, blockSize);
@@ -44,7 +44,7 @@
       var gameOver = function () {
         clearInterval(intervalId);
         ctx.font = "60px Courier";
-        ctx.fillStyle = "Black";
+        ctx.fillStyle = "White";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         ctx.fillText("Конец игры", width / 2, height / 2);
@@ -103,7 +103,8 @@
 
       Snake.prototype.draw = function () {
         for (var i = 0; i < this.segments.length; i++) {
-          this.segments[i].drawSquare("blue");
+          this.segments[i].drawSquare(i % 2 === 0 ? "gold" : "blue");
+          this.segments[0].drawSquare("LimeGreen");
         }
       };
 
@@ -176,8 +177,12 @@
         this.position = new Block(10, 10);
       };
 
+      var colorsForApple = ["Red", "LimeGreen", "Gold"];
+
       Apple.prototype.draw = function () {
-        this.position.drawCircle("LimeGreen");
+        this.position.drawCircle(
+          colorsForApple[Math.floor(Math.random() * colorsForApple.length)]
+        );
       };
 
       Apple.prototype.move = function () {
@@ -189,8 +194,25 @@
       var snake = new Snake();
       var apple = new Apple();
 
+      // Background image for the canvas. We preload it and draw each frame.
+      var bgImage = new Image();
+      bgImage.src = "./public/background.png";
+      var bgReady = false;
+      bgImage.onload = function () {
+        bgReady = true;
+      };
+
       var intervalId = setInterval(function () {
         ctx.clearRect(0, 0, width, height);
+
+        // Draw background image if loaded; otherwise fill with a light color
+        if (bgReady) {
+          ctx.drawImage(bgImage, 0, 0, width, height);
+        } else {
+          ctx.fillStyle = "#f0f0f0";
+          ctx.fillRect(0, 0, width, height);
+        }
+
         drawBorder();
         drawScore();
         snake.move();
